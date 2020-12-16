@@ -27,7 +27,7 @@ import com.dev.services.ProfessorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "Professor")
+@Api(value = "professores")
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/professores")

@@ -28,7 +28,7 @@ import com.dev.services.AlunoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "Aluno")
+@Api(value = "alunos")
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/alunos")
@@ -37,7 +37,7 @@ public class AlunoResource {
 	@Autowired
 	public AlunoService service;
 	
-	@ApiOperation(value = "Buscar todos os alunos cadastrados")
+	@ApiOperation(value = "Listar todos os alunos cadastrados")
 	@GetMapping
 	public ResponseEntity<List<AlunoDTO>> findAll(){
 		List<Aluno> list = service.findAll();
@@ -64,7 +64,7 @@ public class AlunoResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@ApiOperation(value = "Atualiza as informações de um aluno específico")
+	@ApiOperation(value = "Atualizar as informações de um aluno específico")
 	@PreAuthorize("hasAnyRole('ALUNO')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody AlunoSaveDTO objDTO, @PathVariable Integer id){
@@ -74,7 +74,7 @@ public class AlunoResource {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@ApiOperation(value = "Remove o cadastro de um aluno do sistema")
+	@ApiOperation(value = "Remover o cadastro de um aluno do sistema")
 	@PreAuthorize("hasAnyRole('ALUNO')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id){

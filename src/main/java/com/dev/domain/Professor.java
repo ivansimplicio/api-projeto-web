@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import com.dev.domain.enums.Perfil;
@@ -28,7 +29,7 @@ public class Professor extends Usuario{
 	private String formacao;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "coordenador")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "coordenador")
 	private List<Projeto> projetos = new ArrayList<>();
 	
 	public Professor(Integer id, String matricula, String nome, String email, String password, Perfil perfil,

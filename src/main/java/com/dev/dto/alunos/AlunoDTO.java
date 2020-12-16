@@ -1,7 +1,7 @@
 package com.dev.dto.alunos;
 
 import com.dev.domain.Aluno;
-import com.dev.dto.usuarios.UsuarioDTO;
+import com.dev.dto.projetos.ProjetoSimpleDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,18 +12,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AlunoDTO extends UsuarioDTO{
+public class AlunoDTO extends AlunoSimpleDTO{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private String papel;
-	private String curso;
-    private String projeto;
+    private ProjetoSimpleDTO projeto;
     
     public AlunoDTO(Aluno obj) {
-		super(obj.getId(), obj.getMatricula(), obj.getNome(), obj.getEmail());
-		this.papel = obj.getPapel();
-		this.curso = obj.getCurso();
-		this.projeto = obj.getProjeto() == null ? "Não está alocado em projeto": obj.getProjeto().getNome();
+		super(obj);
+		this.projeto = obj.getProjeto() == null ? null : new ProjetoSimpleDTO(obj.getProjeto());
 	}
 }

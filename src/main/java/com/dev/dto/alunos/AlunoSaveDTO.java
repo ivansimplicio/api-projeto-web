@@ -4,7 +4,6 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.dev.domain.Projeto;
 import com.dev.domain.enums.Perfil;
 import com.dev.dto.usuarios.UsuarioSaveDTO;
 
@@ -25,15 +24,9 @@ public class AlunoSaveDTO extends UsuarioSaveDTO{
     @NotEmpty(message="Preenchimento obrigatório.")
 	private String curso;
     
-    private String papel;
-    
-    private Projeto projeto;
-    
     public AlunoSaveDTO(Integer id, String matricula, String nome, String email, String password, Perfil perfil,
-					String curso, Projeto projeto, String papel) {
+					String curso) {
     	super(id, matricula, nome, email, password, perfil);
 		this.curso = curso;
-		this.projeto = projeto;
-		this.papel = papel;
     }
 }

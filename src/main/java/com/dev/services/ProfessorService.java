@@ -1,5 +1,6 @@
 package com.dev.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,8 @@ import com.dev.domain.Professor;
 import com.dev.domain.enums.Perfil;
 import com.dev.dto.professores.ProfessorSaveDTO;
 import com.dev.repository.ProfessorRepository;
+import com.dev.security.UserSS;
+import com.dev.services.exceptions.AuthorizationException;
 import com.dev.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -40,12 +43,24 @@ public class ProfessorService{
 	}
 	
 	public Professor update(Professor obj) {
+		UserSS user = UserService.authenticated();
+
+		if(user == null || !obj.getId().equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado!");
+		}
+		
 		Professor newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
 	
 	public void delete(Integer id) {
+		UserSS user = UserService.authenticated();
+
+		if(user == null || !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado!");
+		}
+		
 		find(id);
 		repo.deleteById(id);
 	}
@@ -54,7 +69,7 @@ public class ProfessorService{
 		newObj.setNome(obj.getNome());
 		newObj.setMatricula(obj.getMatricula());
 		newObj.setEmail(obj.getEmail());
-		newObj.setPassword(obj.getPassword());
+		newObj.setPassword(pe.encode(obj.getPassword()));
 		newObj.setAtuacao(obj.getAtuacao());
 		newObj.setFormacao(obj.getFormacao());
 		newObj.setProjetos(obj.getProjetos());
@@ -63,6 +78,6 @@ public class ProfessorService{
 	
 	public Professor fromDTO(ProfessorSaveDTO objDTO) {
 		return new Professor(objDTO.getId(), objDTO.getMatricula() ,objDTO.getNome(), objDTO.getEmail(), 
-							objDTO.getPassword(), Perfil.PROFESSOR, objDTO.getAtuacao(),  objDTO.getFormacao(), objDTO.getProjetos());
+							objDTO.getPassword(), Perfil.PROFESSOR, objDTO.getAtuacao(),  objDTO.getFormacao(), new ArrayList<>());
 	}
 }

@@ -11,6 +11,8 @@ import com.dev.domain.Aluno;
 import com.dev.domain.enums.Perfil;
 import com.dev.dto.alunos.AlunoSaveDTO;
 import com.dev.repository.AlunoRepository;
+import com.dev.security.UserSS;
+import com.dev.services.exceptions.AuthorizationException;
 import com.dev.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -41,12 +43,24 @@ public class AlunoService {
 	}
 	
 	public Aluno update(Aluno obj) {
+		UserSS user = UserService.authenticated();
+
+		if(user == null || !obj.getId().equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado!");
+		}
+		
 		Aluno newObj = find(obj.getId());
 		updateData(newObj, obj);
 		return repo.save(newObj);
 	}
 	
 	public void delete(Integer id) {
+		UserSS user = UserService.authenticated();
+
+		if(user == null || !id.equals(user.getId())) {
+			throw new AuthorizationException("Acesso negado!");
+		}
+		
 		find(id);
 		repo.deleteById(id);
 	}
@@ -62,6 +76,6 @@ public class AlunoService {
 	
 	public Aluno fromDTO(AlunoSaveDTO objDTO) {
 		return new Aluno(objDTO.getId(), objDTO.getMatricula() ,objDTO.getNome(), objDTO.getEmail(), 
-						objDTO.getPassword(), Perfil.ALUNO, objDTO.getCurso(),  objDTO.getProjeto(), objDTO.getPapel());
+						objDTO.getPassword(), Perfil.ALUNO, objDTO.getCurso(),  null, "");
 	}
 }

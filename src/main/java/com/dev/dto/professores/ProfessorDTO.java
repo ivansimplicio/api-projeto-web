@@ -2,9 +2,10 @@ package com.dev.dto.professores;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.dev.domain.Professor;
-import com.dev.dto.usuarios.UsuarioDTO;
+import com.dev.dto.projetos.ProjetoSimpleDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,26 +16,24 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProfessorDTO extends UsuarioDTO{
+public class ProfessorDTO extends ProfessorSimpleDTO{
 
 	private static final long serialVersionUID = 1L;
 	
-	private String atuacao;
-    private String formacao;
-    private List<String> projetos = new ArrayList<>();
+    private List<ProjetoSimpleDTO> projetos = new ArrayList<>();
     
     public ProfessorDTO(Professor obj) {
-    	super(obj.getId(), obj.getMatricula(), obj.getNome(), obj.getEmail());
-		this.atuacao = obj.getAtuacao();
-		this.formacao = obj.getFormacao();
-		//this.projetos = new ArrayList<>();
+    	super(obj);
+		
+		this.projetos = obj.getProjetos() == null ? new ArrayList<>() : 
+			obj.getProjetos().stream().map(proj -> new ProjetoSimpleDTO(proj)).collect(Collectors.toList());
     }
 
-	public void addProjeto(String proj) {
+	public void addProjeto(ProjetoSimpleDTO proj) {
 		projetos.add(proj);
 	}
 	
-	public String getProjeto(int id) {
+	public ProjetoSimpleDTO getProjeto(int id) {
 		return projetos.get(id);
 	}
 	

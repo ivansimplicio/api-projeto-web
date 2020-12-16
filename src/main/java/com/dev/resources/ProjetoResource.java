@@ -28,7 +28,7 @@ import com.dev.services.ProjetoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "Projeto")
+@Api(value = "projetos")
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/projetos")
@@ -82,6 +82,7 @@ public class ProjetoResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ApiOperation(value = "Adicionar um novo aluno a um projeto específico")
 	@PutMapping(value = "/{id}/add_aluno")
 	public ResponseEntity<Void> addAluno(@RequestBody AlunoAuxDTO obj, @PathVariable Integer id){
 		Projeto projeto = service.find(id);
@@ -89,6 +90,7 @@ public class ProjetoResource {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@ApiOperation(value = "Remover um aluno a um projeto específico")
 	@PutMapping(value = "/{id}/remove_aluno")
 	public ResponseEntity<Void> removeAluno(@RequestBody AlunoAuxDTO obj, @PathVariable Integer id){
 		Projeto projeto = service.find(id);

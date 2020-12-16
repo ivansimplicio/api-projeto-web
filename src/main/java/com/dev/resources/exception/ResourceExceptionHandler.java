@@ -10,6 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.dev.services.exceptions.AuthorizationException;
 import com.dev.services.exceptions.ObjectNotFoundException;
 
 @ControllerAdvice
@@ -24,9 +25,9 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request){
-		String message = "O email informado já encontra-se cadastrado no sistema. Por favor, informe um outro email!";
+		String message = "O email e/ou matrícula já encontra-se cadastrado no sistema.";
 		StandardError err = new StandardError(
-				System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Email já cadastrado.", message, request.getRequestURI());
+				System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Verifique seus dados.", message, request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 	
@@ -38,5 +39,12 @@ public class ResourceExceptionHandler {
 			err.addError(x.getField(), x.getDefaultMessage());
 		}
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(err);
+	}
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request){
+		StandardError err = new StandardError(
+				System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Acesso negado", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
 	}
 }

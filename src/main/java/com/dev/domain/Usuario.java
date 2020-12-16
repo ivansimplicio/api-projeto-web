@@ -54,7 +54,7 @@ public class Usuario implements Serializable{
 	private Set<Integer> perfis = new HashSet<>();
     
     public Usuario(Integer id, String matricula, String nome, String email, String password, Perfil perfil){
-    	//this.id = id;
+    	this.id = id;
     	this.matricula = matricula;
     	this.nome = nome;
     	this.email = email;
